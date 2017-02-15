@@ -13,7 +13,7 @@ Options:
     -l, --limit=<int>           Limit on the number of parsed lines
 
     --some-flag                 Some boolean flag
-    --float-option=<float>      Optionally change value to something other
+    --float-option=<float>      Optionally change value to some other
                                 float [default: 0.2]
 """
 from typeopt import Arguments
