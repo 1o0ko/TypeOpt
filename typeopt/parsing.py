@@ -7,18 +7,21 @@ UNDER_SCORE = '_'
 
 def parsing_rule(func):
     '''
-    Just sets the _is_rule attribute in the input callable
+    Decorator that sets the _is_rule attribute in the input callable
     '''
     func._is_rule = True
     return func
 
 
-def update(k, args, b, f):
-    if b(k):
-        k, k_old = f(k), k
-        args[k] = args.pop(k_old)
+def update(key, args, predicate, transform):
+    '''
+    Conditionally updates keys in a dictionary
+    '''
+    if predicate(key):
+        key, key_old = transform(key), key
+        args[key] = args.pop(key_old)
 
-    return k, args
+    return key, args
 
 
 class FilterClass(type):
@@ -30,8 +33,8 @@ class FilterClass(type):
     '''
 
     def __prepare__(name, bases, **kwds):
-        # This returns an OrderedDict to host the namespace of the created
-        # class
+        # This returns an OrderedDict to host the namespace of 
+        # the created  class
         return collections.OrderedDict()
 
     def __new__(metacls, name, bases, namespace, **kwds):
@@ -108,8 +111,7 @@ def main():
     ''' main function '''
     import copy
 
-
-    msp = DictParser()
+    msp = DictParser([])
 
     args = {'--max-length': 100}
     parsed_args = msp('--max-length', copy.deepcopy(args))

@@ -35,7 +35,7 @@ class Arguments:
         typed = self.get_typed_arguments(doc)
 
         dict_parser = DictParser(typed)
-        for k, _ in args.items():
+        for k in args:
             args = dict_parser(k, args)
 
         # for ease of use
