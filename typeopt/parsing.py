@@ -69,7 +69,9 @@ class BaseParser(metaclass=FilterClass):
 
 
 class DictParser(BaseParser):
-
+    '''
+    Processes the dictionary and applies set of rules on it's keys
+    '''
     def __init__(self, typed):
         self.typed = typed
 
