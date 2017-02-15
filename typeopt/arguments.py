@@ -34,12 +34,11 @@ class Arguments:
         # parse dictionary
         typed = self.get_typed_arguments(doc)
 
-        dict_parser = DictParser(typed)
-        for k in args:
-            args = dict_parser(k, args)
+        parser = DictParser(typed)
+        parsed = [parser(k, v) for k, v in args.items()]
 
         # for ease of use
-        self.__dict__.update(args)
+        self.__dict__.update(parsed)
 
     def __str__(self):
         return str(self.__dict__)

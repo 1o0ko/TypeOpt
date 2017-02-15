@@ -47,12 +47,12 @@ class BaseParser(metaclass=FilterClass):
     them on the input string in definition order.
     '''
 
-    def __call__(self, key, args):
-        _key = key
+    def __call__(self, key, value):
+        _key, _value = key, value
         for rule in self._rules:
-            _key = rule(self, _key, args)
+            _key, _value = rule(self, _key, _value)
 
-        return args
+        return _key, _value
 
 
 class DictParser(BaseParser):
@@ -63,45 +63,35 @@ class DictParser(BaseParser):
     def __init__(self, typed):
         self.typed = typed
 
-    @staticmethod
-    def update(key, args, predicate, transform):
-        '''
-        Conditionally updates keys in a dictionary
-        '''
-        if predicate(key):
-            key, key_old = transform(key), key
-            args[key] = args.pop(key_old)
-
-        return key
-
     @parsing_rule
-    def cast_values(self, k, args):
+    def cast_values(self, k, value):
         type_annotation = next((t for (line, t) in self.typed
                                 if k in line), None)
 
-        if type_annotation and isinstance(args[k], str):
-            clean_value = args[k].replace("=", "")
-            args[k] = eval("%s(%s)" % (type_annotation, clean_value))
+        if type_annotation and isinstance(value, str):
+            clean_value = value.replace("=", "")
+            value = eval("%s(%s)" % (type_annotation, clean_value))
 
-        return k
-
-    @parsing_rule
-    def remove_double_dash(self, k, args):
-        return self.update(k, args,
-                           lambda k: DOUBLE_DASH in k,
-                           lambda k: k.replace(DOUBLE_DASH, ""))
+        return k, value
 
     @parsing_rule
-    def dash_to_underscore(self, k, args):
-        return self.update(k, args,
-                           lambda k: DASH in k,
-                           lambda k: k.replace(DASH, UNDER_SCORE))
+    def remove_double_dash(self, k, v):
+        if DOUBLE_DASH in k:
+            k = k.replace(DOUBLE_DASH, "")
+        return k, v
 
     @parsing_rule
-    def lowercase_if_necessary(self, k, args):
-        return self.update(k, args,
-                           lambda k: any(map(str.isupper, k)),
-                           lambda k: k.lower())
+    def dash_to_underscore(self, k, v):
+        if DASH in k:
+            k = k.replace(DASH, UNDER_SCORE)
+        return k, v
+
+    @parsing_rule
+    def lowercase_if_necessary(self, k, v):
+        if any(map(str.isupper, k)):
+            k = k.lower()
+
+        return k, v
 
 
 def main():
