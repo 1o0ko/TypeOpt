@@ -33,7 +33,7 @@ class FilterClass(type):
     '''
 
     def __prepare__(name, bases, **kwds):
-        # This returns an OrderedDict to host the namespace of 
+        # This returns an OrderedDict to host the namespace of
         # the created  class
         return collections.OrderedDict()
 
@@ -89,22 +89,19 @@ class DictParser(BaseParser):
     def remove_double_dash(self, k, args):
         return update(k, args,
                       lambda k: DOUBLE_DASH in k,
-                      lambda k: k.replace(DOUBLE_DASH, "")
-                      )
+                      lambda k: k.replace(DOUBLE_DASH, ""))
 
     @parsing_rule
     def dash_to_underscore(self, k, args):
         return update(k, args,
                       lambda k: DASH in k,
-                      lambda k: k.replace(DASH, UNDER_SCORE)
-                      )
+                      lambda k: k.replace(DASH, UNDER_SCORE))
 
     @parsing_rule
     def lowercase_if_necessary(self, k, args):
         return update(k, args,
                       lambda k: any(map(str.isupper, k)),
-                      lambda k: k.lower()
-                      )
+                      lambda k: k.lower())
 
 
 def main():
