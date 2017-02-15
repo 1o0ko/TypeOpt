@@ -7,9 +7,9 @@ UNDER_SCORE = '_'
 
 def parsing_rule(func):
     '''
-    Decorator that sets the _is_rule attribute in the input callable
+    Decorator that sets the _rule attribute in the input callable
     '''
-    func._is_rule = True
+    func._rule = True
     return func
 
 
@@ -28,8 +28,8 @@ class FilterClass(type):
 
     '''
     A metaclass that extracts all methods that have
-    a _is_rule attribute and lists them in order in
-    the _is_rules attribute of the class.
+    a _rule attribute and lists them in order in
+    the _rules attribute of the class.
     '''
 
     def __prepare__(name, bases, **kwds):
@@ -45,9 +45,8 @@ class FilterClass(type):
         result = type.__new__(metacls, name, bases, dict(namespace))
 
         # Process all namespace items and extract the marked ones
-        result._is_rules = [
-            value for value in namespace.values() if hasattr(
-                value, '_is_rule')]
+        result._rules = [
+            value for value in namespace.values() if hasattr(value, '_rule')]
         return result
 
 
@@ -63,7 +62,7 @@ class BaseParser(metaclass=FilterClass):
         _key = key
 
         # Loop on filters and apply them on the key
-        for rule in self._is_rules:
+        for rule in self._rules:
             _key, args = rule(self, _key, args)
 
         return args
