@@ -3,7 +3,7 @@ import collections
 DOUBLE_DASH = '--'
 DASH = '-'
 UNDER_SCORE = '_'
-
+STRING = 'str'
 
 def parsing_rule(func):
     '''
@@ -70,7 +70,10 @@ class DictParser(BaseParser):
 
         if type_annotation and isinstance(value, str):
             clean_value = value.replace("=", "")
-            value = eval("%s(%s)" % (type_annotation, clean_value))
+            if type_annotation != STRING:
+                value = eval("%s(%s)" % (type_annotation, clean_value))
+            else:
+                value = clean_value
 
         return k, value
 

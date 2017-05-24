@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='typeopt',
-    version='0.1',
+    version='0.2',
     description='Typed docopt',
     author='Wojciech Stokowiec',
     author_email='wojciech.stokowiec@tooploox.com',
