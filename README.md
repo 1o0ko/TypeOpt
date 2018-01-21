@@ -1,6 +1,5 @@
 # typeopt
-Typed version of docopt. Used in Machine Learning experiments. 
-
+Typed version of [docopt](https://github.com/docopt/docopt) thanks to metaclasses. To be used in Machine Learning experiments. 
 
 ```python
 """
@@ -25,3 +24,5 @@ if __name__ == '__main__':
 
     print(arguments)
 ```
+
+Sample usage can be found in my repository with [short, self-contained tensorflow examples](https://github.com/1o0ko/tf-kata).
